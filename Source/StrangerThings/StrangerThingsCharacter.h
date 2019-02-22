@@ -33,6 +33,9 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
+    
+    /** Called for crouch and uncrouch */
+    void ToggleCrouch();
 
 
 public:

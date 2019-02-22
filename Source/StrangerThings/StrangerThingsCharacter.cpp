@@ -50,11 +50,18 @@ AStrangerThingsCharacter::AStrangerThingsCharacter()
 
 void AStrangerThingsCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
+    //Initialize the can crouch property
+    GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+    
 	// set up gameplay key bindings
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+    PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AStrangerThingsCharacter::ToggleCrouch);
+    PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AStrangerThingsCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AStrangerThingsCharacter::MoveRight);
 
+    
+    
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AStrangerThingsCharacter::TouchStarted);
 	PlayerInputComponent->BindTouch(IE_Released, this, &AStrangerThingsCharacter::TouchStopped);
 }
@@ -63,6 +70,14 @@ void AStrangerThingsCharacter::MoveRight(float Value)
 {
 	// add movement in that direction
 	AddMovementInput(FVector(0.f,-1.f,0.f), Value);
+}
+
+void AStrangerThingsCharacter::ToggleCrouch(){
+    if (CanCrouch() == true){
+        Crouch();
+    } else {
+        UnCrouch();
+    }
 }
 
 void AStrangerThingsCharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
